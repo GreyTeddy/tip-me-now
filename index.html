@@ -50,12 +50,18 @@
       </button>
     </div>
     <div
+      id="processing"
+      class="overflow-hidden h-screen flex flex-col items-center justify-center gap-1"
+    >
+      <p id="title" class="text-center text-lg">Processing...</p>
+    </div>
+    <div
       id="thank_you"
       class="overflow-hidden h-screen flex flex-col items-center justify-center gap-1"
     >
       <h1 id="title" class="text-center text-lg">Thank You!</h1>
       <p id="title" class="text-center text-lg">
-        Your transaction has been accepted
+        Your transaction has been accepted.
       </p>
       <button
         id="tip_more_button"
@@ -70,39 +76,40 @@
     const sleep = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));
     };
-    const disableButtonsTemporarily = async (event) => {
+    const disableButtonsTemporarily = async (ms) => {
       for (const button of buttonsToBeDisabled) {
         button.disabled = true;
       }
-      await sleep(1000);
+      await sleep(ms);
       for (const button of buttonsToBeDisabled) {
         button.disabled = false;
       }
     };
     const info_wrapper = document.getElementById("info");
     const thank_you_wrapper = document.getElementById("thank_you");
+    const processing_wrapper = document.getElementById("processing");
     const buttonsToBeDisabled = ["15_button", "20_button", "custom_button"].map(
       (e) => document.getElementById(e),
     );
     document.addEventListener("click", async (event) => {
       const isButton = event.target.nodeName === "BUTTON";
-      console.log(event.target);
       if (!isButton) {
         return;
       }
       if (event.target.id === "tip_more_button") {
         thank_you_wrapper.classList.add("hidden");
         info_wrapper.classList.remove("hidden");
-        console.log("hello");
         return;
       }
       if (event.target.id === "25_button") {
         info_wrapper.classList.add("hidden");
+        processing_wrapper.classList.remove("hidden");
+        await sleep(500 + parseInt(Math.random() * 2000));
+        processing_wrapper.classList.add("hidden");
         thank_you_wrapper.classList.remove("hidden");
-        console.log(thank_you_wrapper);
         return;
       }
-      await disableButtonsTemporarily();
+      await disableButtonsTemporarily(1000);
     });
   </script>
 
@@ -121,6 +128,10 @@
       }
 
       #thank_you {
+        display: none;
+      }
+
+      #processing {
         display: none;
       }
 
