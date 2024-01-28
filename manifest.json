@@ -1,0 +1,9 @@
+{
+  "name": "Tip Me Please",
+  "short_name": "TMP",
+  "start_url": "index.html",
+  "scope": "./",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

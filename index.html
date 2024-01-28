@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" class="fixed w-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=0"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json" />
+    <title>Tip Me</title>
+  </head>
+  <body>
+    <p
+      id="prompt"
+      class="md:flex h-sreen flex flex-col items-center justify-center landscape:hidden"
+    >
+      Rotate screen to landscape
+    </p>
+    <div
+      id="info"
+      class="overflow-hidden h-screen flex flex-col items-center justify-center gap-1"
+    >
+      <h1 id="title" class="text-center text-lg">Leave a tip?</h1>
+      <div id="defined-percentages">
+        <button
+          id="15_button"
+          class="bg-blue-500 disabled:bg-blue-100 hover:bg-blue-700 text-lg text-white font-bold py-10 px-20"
+        >
+          15%
+        </button>
+        <button
+          id="20_button"
+          class="bg-blue-500 disabled:bg-blue-100 hover:bg-blue-700 text-lg text-white font-bold py-10 px-20"
+        >
+          20%
+        </button>
+        <button
+          id="25_button"
+          class="bg-blue-500 disabled:bg-blue-100 hover:bg-blue-700 text-lg text-white font-bold py-10 px-20"
+        >
+          25%
+        </button>
+      </div>
+      <button
+        id="custom_button"
+        class="bg-blue-500 disabled:bg-blue-100 hover:bg-blue-700 text-white font-bold py-5 px-[17rem]"
+      >
+        Custom
+      </button>
+    </div>
+    <div
+      id="thank_you"
+      class="overflow-hidden h-screen flex flex-col items-center justify-center gap-1"
+    >
+      <h1 id="title" class="text-center text-lg">Thank You!</h1>
+      <p id="title" class="text-center text-lg">
+        Your transaction has been accepted
+      </p>
+      <button
+        id="tip_more_button"
+        class="bg-blue-500 disabled:bg-blue-100 hover:bg-blue-700 text-white font-bold py-5 px-[17rem]"
+      >
+        Tip More
+      </button>
+    </div>
+  </body>
+
+  <script>
+    const sleep = (ms) => {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    };
+    const disableButtonsTemporarily = async (event) => {
+      for (const button of buttonsToBeDisabled) {
+        button.disabled = true;
+      }
+      await sleep(1000);
+      for (const button of buttonsToBeDisabled) {
+        button.disabled = false;
+      }
+    };
+    const info_wrapper = document.getElementById("info");
+    const thank_you_wrapper = document.getElementById("thank_you");
+    const buttonsToBeDisabled = ["15_button", "20_button", "custom_button"].map(
+      (e) => document.getElementById(e),
+    );
+    document.addEventListener("click", async (event) => {
+      const isButton = event.target.nodeName === "BUTTON";
+      console.log(event.target);
+      if (!isButton) {
+        return;
+      }
+      if (event.target.id === "tip_more_button") {
+        thank_you_wrapper.classList.add("hidden");
+        info_wrapper.classList.remove("hidden");
+        console.log("hello");
+        return;
+      }
+      if (event.target.id === "25_button") {
+        info_wrapper.classList.add("hidden");
+        thank_you_wrapper.classList.remove("hidden");
+        console.log(thank_you_wrapper);
+        return;
+      }
+      await disableButtonsTemporarily();
+    });
+  </script>
+
+  <script>
+    self.addEventListener("fetch", (event) => {});
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+
+  <style>
+    /* only when orientation is in portrait mode */
+    @media only screen and (orientation: portrait) {
+      #info {
+        display: none;
+      }
+
+      #thank_you {
+        display: none;
+      }
+
+      #prompt {
+        display: flex;
+      }
+    }
+  </style>
+</html>
